@@ -99,34 +99,29 @@ pub fn signedDurationSince(this: @This(), other: @This()) i64 {
 
 pub fn format(
     this: @This(),
-    comptime fmt: []const u8,
-    options: std.fmt.FormatOptions,
-    writer: anytype,
+    writer: *std.Io.Writer,
 ) !void {
-    _ = fmt;
-    _ = options;
-
-    try std.fmt.format(writer, "{:0>2}:{:0>2}:{:0>2}", .{ this.hour(), this.minute(), this.second() });
+    try writer.print("{:0>2}:{:0>2}:{:0>2}", .{ this.hour(), this.minute(), this.second() });
 }
 
 pub const MAX_HOURS = 24;
 
 pub const HoursInt = @Type(.{
-    .Int = .{
+    .int = .{
         .bits = std.math.log2_int_ceil(u64, MAX_HOURS),
         .signedness = .unsigned,
     },
 });
 
 pub const MinutesInt = @Type(.{
-    .Int = .{
+    .int = .{
         .bits = std.math.log2_int_ceil(u64, min_per_hour),
         .signedness = .unsigned,
     },
 });
 
 pub const SecondsInt = @Type(.{
-    .Int = .{
+    .int = .{
         .bits = std.math.log2_int_ceil(u64, s_per_min),
         .signedness = .unsigned,
     },
@@ -135,7 +130,7 @@ pub const SecondsInt = @Type(.{
 /// The number of seconds in a day
 pub const SECONDS_PER_DAY = MAX_HOURS * std.time.s_per_hour;
 pub const SecsInt = @Type(.{
-    .Int = .{
+    .int = .{
         .bits = std.math.log2_int_ceil(u64, SECONDS_PER_DAY),
         .signedness = .unsigned,
     },
@@ -144,7 +139,7 @@ pub const SecsInt = @Type(.{
 /// Frac can be up to two seconds to represent leap seconds
 pub const MAX_FRAC = 2 * std.time.ns_per_s;
 pub const FracInt = @Type(.{
-    .Int = .{
+    .int = .{
         .bits = std.math.log2_int_ceil(u64, MAX_FRAC),
         .signedness = .unsigned,
     },

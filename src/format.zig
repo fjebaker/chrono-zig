@@ -29,7 +29,7 @@ pub const Specifier = enum(u8) {
 
     pub fn formatNaiveDateTime(
         this: @This(),
-        writer: anytype,
+        writer: *std.Io.Writer,
         dt: NaiveDateTime,
     ) !void {
         switch (this) {
@@ -70,7 +70,7 @@ pub const Part = union(enum) {
 
     pub fn formatNaiveDateTime(
         this: @This(),
-        writer: anytype,
+        writer: *std.Io.Writer,
         dt: NaiveDateTime,
     ) !void {
         switch (this) {
@@ -126,13 +126,13 @@ pub fn parseFormatAlloc(allocator: std.mem.Allocator, format_str: []const u8) ![
     return parts.toOwnedSlice();
 }
 
-pub fn formatNaiveDateTimeParts(writer: anytype, parts: []const Part, dt: NaiveDateTime) !void {
+pub fn formatNaiveDateTimeParts(writer: *std.Io.Writer, parts: []const Part, dt: NaiveDateTime) !void {
     for (parts) |part| {
         try part.formatNaiveDateTime(writer, dt);
     }
 }
 
-pub fn formatNaiveDateTime(writer: anytype, format: []const u8, dt: NaiveDateTime) !void {
+pub fn formatNaiveDateTime(writer: *std.Io.Writer, format: []const u8, dt: NaiveDateTime) !void {
     var next_char_is_specifier = false;
     for (format) |fc| {
         if (next_char_is_specifier) {

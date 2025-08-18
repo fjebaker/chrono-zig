@@ -58,9 +58,11 @@ const TestsAndExamplesOptions = struct {
 
 pub fn buildTestsAndExamplesForTarget(b: *std.Build, options: TestsAndExamplesOptions) void {
     const test_exe = b.addTest(.{
-        .root_source_file = b.path("src/lib.zig"),
-        .target = options.target,
-        .optimize = options.optimize,
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("src/lib.zig"),
+            .target = options.target,
+            .optimize = options.optimize,
+        }),
     });
 
     const run_tests = b.addRunArtifact(test_exe);
@@ -92,11 +94,13 @@ const ExampleOptions = struct {
 pub fn addExample(b: *std.Build, options: ExampleOptions) void {
     const exe = b.addExecutable(.{
         .name = options.name,
-        .root_source_file = b.path(
-            b.pathJoin(&.{ "examples", b.fmt("{s}.zig", .{options.name}) }),
-        ),
-        .target = options.target,
-        .optimize = options.optimize,
+        .root_module = b.createModule(.{
+            .root_source_file = b.path(
+                b.pathJoin(&.{ "examples", b.fmt("{s}.zig", .{options.name}) }),
+            ),
+            .target = options.target,
+            .optimize = options.optimize,
+        }),
     });
     exe.root_module.addImport("chrono", options.chrono);
 

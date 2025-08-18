@@ -72,22 +72,17 @@ pub const HoursMinutesSeconds = packed struct(i32) {
 
     pub fn format(
         this: @This(),
-        comptime fmt: []const u8,
-        options: std.fmt.FormatOptions,
-        writer: anytype,
+        writer: *std.Io.Writer,
     ) !void {
-        _ = fmt;
-        _ = options;
-
-        try std.fmt.format(writer, "{s}{}", .{
+        try writer.print("{s}{}", .{
             if (this.negative) "-" else "",
             this.hours,
         });
         if (this.minutes != 0 or this.seconds != 0) {
-            try std.fmt.format(writer, ":{}", .{this.minutes});
+            try writer.print(":{}", .{this.minutes});
         }
         if (this.seconds != 0) {
-            try std.fmt.format(writer, ":{}", .{this.seconds});
+            try writer.print(":{}", .{this.seconds});
         }
     }
 };

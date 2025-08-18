@@ -1,0 +1,11 @@
+.{
+    .name = .chrono,
+    .version = "0.1.0",
+    .fingerprint = 0x322e3e31e87b57b9,
+    .paths = .{
+        "src",
+        "build.zig",
+        "build.zig.zon",
+        "LICENSE",
+    },
+}
